@@ -20,8 +20,8 @@ if [ "${#monitors[@]}" -eq 0 ]; then
 fi
 
 # Config base del plugin.
-# En v1.1.0 (Hyprland 0.41.x) solo count/keep_focused/enable_notifications son efectivos.
-hyprctl keyword plugin:split-monitor-workspaces:count 4 >/dev/null 2>&1 || true
+# En v1.1.0 (Hyprland 0.41.x) usamos count amplio y el límite dinámico por monitor lo aplica split-dispatch-strict.sh.
+hyprctl keyword plugin:split-monitor-workspaces:count 10 >/dev/null 2>&1 || true
 hyprctl keyword plugin:split-monitor-workspaces:keep_focused 1 >/dev/null 2>&1 || true
 hyprctl keyword plugin:split-monitor-workspaces:enable_notifications 0 >/dev/null 2>&1 || true
 

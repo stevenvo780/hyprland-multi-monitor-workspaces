@@ -8,9 +8,11 @@ Configuracion lista para Hyprland con enfoque en multitarea multi-monitor y plug
 - `hypr/conf.d/99-split-monitor-workspaces.conf`
 - `hypr/scripts/load-split-plugin.sh`
 - `hypr/scripts/split-dispatch-strict.sh`
+- `hypr/scripts/split-limit-adjust.sh`
 - `hypr/scripts/split-ws-setup.sh`
 - `scripts/build-plugin.sh` (compila plugin pinneado)
 - `scripts/deploy-config.sh` (instala esta config en `~/.config/hypr`)
+- `scripts/stress-headless.sh` (pruebas intensivas automatizadas)
 
 ## Versiones objetivo
 
@@ -38,6 +40,12 @@ Configuracion lista para Hyprland con enfoque en multitarea multi-monitor y plug
    hyprctl binds | rg split-
    ```
 
+4. Ejecutar bateria intensiva de estabilidad:
+
+   ```bash
+   ./scripts/stress-headless.sh
+   ```
+
 ## Nota
 
 En esta version del plugin (v1.1.0), los dispatchers disponibles usados por esta config son:
@@ -55,3 +63,12 @@ Adicionalmente, esta configuracion aplica una capa de control estricto por monit
 - Monitor 3+: max `4` workspaces locales
 
 Esto fuerza el comportamiento `2/3/4` en los atajos configurados aunque el plugin 1.1.0 no exponga limites por monitor nativos.
+
+## Resultados de stress (2026-02-26)
+
+- Corrida intensa A: `RESTART_CYCLES=30 SEQ_OPS=6000 PAR_WORKERS=12 PAR_OPS=1800` -> `Fallos: 0`.
+- Corrida intensa B: `RESTART_CYCLES=50 SEQ_OPS=10000 PAR_WORKERS=16 PAR_OPS=2600` -> `Fallos: 0`.
+
+Nota tecnica:
+- En pruebas headless de Hyprland 0.41.2, usar `XDG_RUNTIME_DIR` largo puede provocar crash por overflow en socket path.
+- El harness usa rutas cortas (`/tmp/hs*`) para evitar falsos negativos de laboratorio.
