@@ -1,0 +1,7 @@
+# Build outputs
+hypr/plugins/*.so
+
+# OS/editor
+.DS_Store
+*.swp
+*.swo
