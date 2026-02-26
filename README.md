@@ -13,6 +13,7 @@ Configuracion lista para Hyprland con enfoque en multitarea multi-monitor y plug
 - `scripts/build-plugin.sh` (compila plugin pinneado)
 - `scripts/deploy-config.sh` (instala esta config en `~/.config/hypr`)
 - `scripts/stress-headless.sh` (pruebas intensivas automatizadas)
+- `scripts/edgecases-headless.sh` (bateria de edge cases)
 
 ## Versiones objetivo
 
@@ -46,6 +47,12 @@ Configuracion lista para Hyprland con enfoque en multitarea multi-monitor y plug
    ./scripts/stress-headless.sh
    ```
 
+5. Ejecutar edge cases:
+
+   ```bash
+   ./scripts/edgecases-headless.sh
+   ```
+
 ## Nota
 
 En esta version del plugin (v1.1.0), los dispatchers disponibles usados por esta config son:
@@ -72,3 +79,16 @@ Esto fuerza el comportamiento `2/3/4` en los atajos configurados aunque el plugi
 Nota tecnica:
 - En pruebas headless de Hyprland 0.41.2, usar `XDG_RUNTIME_DIR` largo puede provocar crash por overflow en socket path.
 - El harness usa rutas cortas (`/tmp/hs*`) para evitar falsos negativos de laboratorio.
+
+## Resultados de edge cases (2026-02-26)
+
+- Corrida edge A: `OUTPUT_MATRIX='1 2 3 5' RAPID_ITERS=500` -> `Fallos: 0`.
+- Corrida edge B: `OUTPUT_MATRIX='3 5' RAPID_ITERS=1400` -> `Fallos: 0`.
+
+Cobertura clave:
+- clamp por defecto `2/3/4` con `1,2,3,5` monitores.
+- requests invalidos (`0`, negativos, texto, vacio) y request gigante (`999999`).
+- limites dinamicos en extremos (`1` y `10`).
+- estado corrupto de `split-limits.json` con autorecuperacion.
+- valores fuera de rango y claves de monitores obsoletas.
+- degradacion controlada cuando falta el `.so` del plugin.

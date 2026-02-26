@@ -17,6 +17,11 @@ mkdir -p "$STATE_DIR"
 exec 9>"$LOCK_FILE"
 flock -x 9
 
+# Si el estado quedó corrupto (apagado brusco/interrupción), se auto-recupera.
+if ! jq -e 'type == "object"' "$STATE_FILE" >/dev/null 2>&1; then
+    printf '{}\n' > "$STATE_FILE"
+fi
+
 default_limit_for_index() {
     local idx="$1"
     case "$idx" in
